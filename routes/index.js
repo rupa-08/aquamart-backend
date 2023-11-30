@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const app = express();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const router = express.Router();
+
+const userRoute = require("./users.js");
+const authRoute = require("./auth.js");
+const authCheck = require("../app/middlewares/auth.middlewares.js");
+
+// http://localhost:9000/api/v1/user
+router.use("/", authRoute);
+router.use("/user", authCheck, userRoute);
 
 module.exports = router;
