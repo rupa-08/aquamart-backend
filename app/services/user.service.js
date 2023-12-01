@@ -1,5 +1,6 @@
 const { dbConnect } = require("../services/mongodb.service");
 const { db_name } = require("../../config/db.config");
+const { ObjectId } = require("mongodb");
 
 class UserService {
   // validations
@@ -99,8 +100,54 @@ class UserService {
 
       return result;
     } catch (error) {
-      console.error("Error in sign in:", error);
+      console.error("Error in fetching user list:", error);
       throw error;
+    }
+  };
+
+  findUserById = async (id) => {
+    const client = await dbConnect();
+    const user = await client
+      .db(db_name)
+      .collection("users")
+      .findOne({
+        _id: new ObjectId(id),
+      });
+    if (user) {
+      return user;
+    } else {
+      throw { status: 400, message: "User does not exist." };
+    }
+  };
+
+  findAllAdmin = async () => {
+    const client = await dbConnect();
+    const admins = await client
+      .db(db_name)
+      .collection("users")
+      .find({
+        role: "admin",
+      })
+      .toArray();
+    if (admins) {
+      return admins;
+    } else {
+      throw { status: 400, message: "Admin fetched." };
+    }
+  };
+
+  updateUser = async (id) => {
+    const client = await dbConnect();
+    const user = await client
+      .db(db_name)
+      .collection("users")
+      .findOneAndUpdate({
+        _id: new ObjectId(id),
+      });
+    if (user) {
+      return user;
+    } else {
+      throw { status: 400, message: "Update user failed." };
     }
   };
 }

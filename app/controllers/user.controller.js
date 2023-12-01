@@ -14,25 +14,65 @@ class UserController {
         message: "User fetched.",
       });
     } catch (error) {
-      callback(error);
+      callback({
+        status: 500,
+        message: error || "Internal Server Error",
+      });
     }
   };
 
-  getUserById = (req, res, callback) => {
-    let user = {};
-    res.json({
-      result: user,
-      status: true,
-      message: "User info fetched.",
-    });
+  findAdminUser = async (req, res, callback) => {
+    try {
+      let users = await this.user_service.findAllAdmin();
+      res.json({
+        result: users,
+        status: true,
+        message: "Admin users fetched.",
+      });
+    } catch (error) {
+      callback({
+        status: 500,
+        message: error || "Internal Server Error",
+      });
+    }
   };
 
-  updateUser = (req, res, callback) => {
-    res.json({
-      result: null,
-      status: true,
-      message: "User updated",
-    });
+  getUserById = async (req, res, callback) => {
+    try {
+      let user = await this.user_service.findUserById(req.params?.id);
+
+      res.json({
+        result: user,
+        status: true,
+        message: "User info fetched.",
+      });
+    } catch (error) {
+      callback({
+        status: 500,
+        message: error || "Internal Server Error",
+      });
+    }
+  };
+
+  updateUser = async (req, res, callback) => {
+    try {
+      let result = await this.user_service.updateUser(req.body);
+
+      if (result) {
+        res.json({
+          result: null,
+          status: true,
+          message: "User updated.",
+        });
+      } else {
+        throw "Error in updating the user.";
+      }
+    } catch (error) {
+      callback({
+        status: 500,
+        message: error || "Internal Server Error",
+      });
+    }
   };
 
   deleteUser = (req, res, callback) => {

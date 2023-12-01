@@ -8,6 +8,7 @@ router.route("/").get(user_ctl.getAllUsers);
 // .post((req, res, next) => {
 //   res.send("User created");
 // });
+router.route("/admin").get(user_ctl.findAdminUser);
 
 router
   .route("/:id")
