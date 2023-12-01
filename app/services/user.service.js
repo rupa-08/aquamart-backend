@@ -1,3 +1,6 @@
+const { dbConnect } = require("../services/mongodb.service");
+const { db_name } = require("../../config/db.config");
+
 class UserService {
   validateEmail = (email) => {
     return String(email)
@@ -24,6 +27,21 @@ class UserService {
       throw { status: 400, message: error };
     } else {
       return null;
+    }
+  };
+
+  signupUser = async (data) => {
+    try {
+      const client = await dbConnect();
+      const result = await client
+        .db(db_name)
+        .collection("users")
+        .insertOne(data);
+
+      return result;
+    } catch (error) {
+      console.error("Error in signupUser:", error);
+      throw error;
     }
   };
 }

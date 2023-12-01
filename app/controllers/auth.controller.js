@@ -7,22 +7,28 @@ class AuthController {
 
   signin = (req, res, next) => {};
 
-  signup = (req, res, callback) => {
+  signup = async (req, res, callback) => {
     try {
       let data = req.body;
       data.image = req.file.filename;
 
-      this.user_service.validateUser(data);
-      // to do db
-      req.myEvents.emit("signup", data);
+      this.user_service.validateUser(data); //validating user
+      let response = await this.user_service.signupUser(data); //stroing user in db
 
-      res.json({
-        result: data,
-        status: true,
-        message: "Successful",
-      });
+      if (response) {
+        res.json({
+          status: true,
+          result: response,
+          message: "Registration successful.",
+        });
+      } else {
+        throw response;
+      }
     } catch (error) {
-      callback(error);
+      callback({
+        status: 500,
+        message: error.message || "Internal Server Error",
+      });
     }
   };
 }
