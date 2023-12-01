@@ -17,7 +17,7 @@ io.on("connection", (socket) => {
 app.use(events);
 
 app.use(express.json());
-
+// app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
