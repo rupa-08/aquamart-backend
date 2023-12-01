@@ -53,7 +53,7 @@ class UserService {
     }
   };
 
-  // storing to db
+  // db services
 
   signupUser = async (data) => {
     try {
@@ -82,6 +82,22 @@ class UserService {
       } else {
         throw { status: 400, message: "Credentials does not match." };
       }
+    } catch (error) {
+      console.error("Error in sign in:", error);
+      throw error;
+    }
+  };
+
+  getAllUsers = async () => {
+    try {
+      const client = await dbConnect();
+      const result = await client
+        .db(db_name)
+        .collection("users")
+        .find()
+        .toArray();
+
+      return result;
     } catch (error) {
       console.error("Error in sign in:", error);
       throw error;

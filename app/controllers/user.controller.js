@@ -1,14 +1,24 @@
+const UserService = require("../services/user.service");
+
 class UserController {
-  getAllUsers = (req, res, next) => {
-    let users = [];
-    res.json({
-      result: users,
-      status: true,
-      message: "User fetched.",
-    });
+  constructor() {
+    this.user_service = new UserService();
+  }
+
+  getAllUsers = async (req, res, callback) => {
+    try {
+      let users = await this.user_service.getAllUsers();
+      res.json({
+        result: users,
+        status: true,
+        message: "User fetched.",
+      });
+    } catch (error) {
+      callback(error);
+    }
   };
 
-  getUserById = (req, res, next) => {
+  getUserById = (req, res, callback) => {
     let user = {};
     res.json({
       result: user,
@@ -17,7 +27,7 @@ class UserController {
     });
   };
 
-  updateUser = (req, res, next) => {
+  updateUser = (req, res, callback) => {
     res.json({
       result: null,
       status: true,
@@ -25,7 +35,7 @@ class UserController {
     });
   };
 
-  deleteUser = (req, res, next) => {
+  deleteUser = (req, res, callback) => {
     res.json({
       result: null,
       status: true,
