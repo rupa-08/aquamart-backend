@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/user.model");
-
+const jwt = require("jsonwebtoken");
+const ENV = require("../../config/app.config");
 class UserService {
   // validations
   validateEmail = (email) => {
@@ -99,6 +100,11 @@ class UserService {
       role: "admin",
     });
     return adminUsers;
+  };
+
+  getAccessToken = (payload) => {
+    let token = jwt.sign(payload, ENV.JWT_SECRET);
+    return token;
   };
 }
 

@@ -10,18 +10,25 @@ class AuthController {
       let data = await req.body;
 
       this.user_service.validateSignIn(data); //validating user
-      let response = await this.user_service.signinUser(data); //stroing user in db
+      let user = await this.user_service.signinUser(data); //stroing user in db
+      let token = this.user_service.getAccessToken({ id: user._id }); // creating id token
 
-      if (response) {
+      console.log("t", token);
+
+      if (user) {
         res.json({
           status: true,
-          response: response,
+          result: {
+            user: user,
+            token: token,
+          },
           message: "Signin successful.",
         });
       } else {
-        throw response;
+        throw user;
       }
     } catch (error) {
+      console.log("error", error);
       callback({
         status: 500,
         message: error || "Internal Server Error",
@@ -37,16 +44,16 @@ class AuthController {
       this.user_service.validateUser(data);
       data.password = bcrypt.hashSync(data.password, 10);
 
-      let response = await this.user_service.signupUser(data);
+      let user = await this.user_service.signupUser(data);
 
-      if (response) {
+      if (user) {
         res.json({
           status: true,
-          result: response,
+          result: user,
           message: "Registration successful.",
         });
       } else {
-        throw response;
+        throw user;
       }
     } catch (error) {
       console.log(error);
