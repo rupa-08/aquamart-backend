@@ -1,6 +1,4 @@
-const { dbConnect } = require("../services/mongodb.service");
-const { db_name } = require("../../config/db.config");
-const { ObjectId } = require("mongodb");
+const bcrypt = require("bcrypt");
 const UserModel = require("../models/user.model");
 
 class UserService {
@@ -65,12 +63,16 @@ class UserService {
   signinUser = async (data) => {
     let user = await UserModel.findOne({
       email: data?.email,
-      password: data?.password,
     });
     if (user) {
-      return user;
+      let passwordValid = bcrypt.compareSync(data?.password, user?.password);
+      if (passwordValid) {
+        return user;
+      } else {
+        throw { status: 401, message: "Invalid Password" };
+      }
     } else {
-      throw { status: 400, message: "Credentials does not match." };
+      throw { status: 400, message: "User not found." };
     }
   };
 

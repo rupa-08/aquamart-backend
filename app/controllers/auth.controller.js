@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const UserService = require("../services/user.service");
 
 class AuthController {
@@ -34,6 +35,8 @@ class AuthController {
       data.image = req.file.filename;
 
       this.user_service.validateUser(data);
+      data.password = bcrypt.hashSync(data.password, 10);
+
       let response = await this.user_service.signupUser(data);
 
       if (response) {
