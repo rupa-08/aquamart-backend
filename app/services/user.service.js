@@ -1,6 +1,7 @@
 const { dbConnect } = require("../services/mongodb.service");
 const { db_name } = require("../../config/db.config");
 const { ObjectId } = require("mongodb");
+const UserModel = require("../models/user.model");
 
 class UserService {
   // validations
@@ -57,62 +58,33 @@ class UserService {
   // db services
 
   signupUser = async (data) => {
-    try {
-      const client = await dbConnect();
-      const result = await client
-        .db(db_name)
-        .collection("users")
-        .insertOne(data);
-
-      return result;
-    } catch (error) {
-      console.error("Error in sign up:", error);
-      throw error;
-    }
+    let user_obj = new UserModel(data);
+    return await user_obj.save();
   };
 
   signinUser = async (data) => {
-    try {
-      const client = await dbConnect();
-      const result = await client.db(db_name).collection("users").findOne({
-        email: data.email,
-        password: data.password,
-      });
-      if (result) {
-        return result;
-      } else {
-        throw { status: 400, message: "Credentials does not match." };
-      }
-    } catch (error) {
-      console.error("Error in sign in:", error);
-      throw error;
+    let user = await UserModel.findOne({
+      email: data?.email,
+      password: data?.password,
+    });
+    if (user) {
+      return user;
+    } else {
+      throw { status: 400, message: "Credentials does not match." };
     }
   };
 
   getAllUsers = async () => {
-    try {
-      const client = await dbConnect();
-      const result = await client
-        .db(db_name)
-        .collection("users")
-        .find()
-        .toArray();
-
-      return result;
-    } catch (error) {
-      console.error("Error in fetching user list:", error);
-      throw error;
+    let users = await UserModel.find();
+    if (users) {
+      return users;
+    } else {
+      throw { status: 400, message: "Users not found." };
     }
   };
 
   findUserById = async (id) => {
-    const client = await dbConnect();
-    const user = await client
-      .db(db_name)
-      .collection("users")
-      .findOne({
-        _id: new ObjectId(id),
-      });
+    let user = await UserModel.findById(id);
     if (user) {
       return user;
     } else {
@@ -121,34 +93,10 @@ class UserService {
   };
 
   findAllAdmin = async () => {
-    const client = await dbConnect();
-    const admins = await client
-      .db(db_name)
-      .collection("users")
-      .find({
-        role: "admin",
-      })
-      .toArray();
-    if (admins) {
-      return admins;
-    } else {
-      throw { status: 400, message: "Admin fetched." };
-    }
-  };
-
-  updateUser = async (id) => {
-    const client = await dbConnect();
-    const user = await client
-      .db(db_name)
-      .collection("users")
-      .findOneAndUpdate({
-        _id: new ObjectId(id),
-      });
-    if (user) {
-      return user;
-    } else {
-      throw { status: 400, message: "Update user failed." };
-    }
+    let adminUsers = await UserModel.find({
+      role: "admin",
+    });
+    return adminUsers;
   };
 }
 

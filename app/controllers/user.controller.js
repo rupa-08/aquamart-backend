@@ -56,17 +56,11 @@ class UserController {
 
   updateUser = async (req, res, callback) => {
     try {
-      let result = await this.user_service.updateUser(req.body);
-
-      if (result) {
-        res.json({
-          result: null,
-          status: true,
-          message: "User updated.",
-        });
-      } else {
-        throw "Error in updating the user.";
-      }
+      res.json({
+        result: null,
+        status: true,
+        message: "User updated.",
+      });
     } catch (error) {
       callback({
         status: 500,

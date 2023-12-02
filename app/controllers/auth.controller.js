@@ -46,6 +46,7 @@ class AuthController {
         throw response;
       }
     } catch (error) {
+      console.log(error);
       callback({
         status: 500,
         message: error || "Internal Server Error",

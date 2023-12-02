@@ -4,6 +4,8 @@ var path = require("path");
 const routes = require("./routes");
 const events = require("./app/events/event");
 
+require("./config/mongoose");
+
 const http = require("http");
 const server = http.createServer(app);
 
