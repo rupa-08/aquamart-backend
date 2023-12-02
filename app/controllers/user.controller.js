@@ -5,10 +5,10 @@ class UserController {
     this.user_service = new UserService();
   }
 
-  getAllUsers = async (req, res, callback) => {
+  getAllUsers = async (request, response, callback) => {
     try {
       let users = await this.user_service.getAllUsers();
-      res.json({
+      response.json({
         result: users,
         status: true,
         message: "User fetched.",
@@ -21,10 +21,10 @@ class UserController {
     }
   };
 
-  findAdminUser = async (req, res, callback) => {
+  findAdminUser = async (request, response, callback) => {
     try {
       let users = await this.user_service.findAllAdmin();
-      res.json({
+      response.json({
         result: users,
         status: true,
         message: "Admin users fetched.",
@@ -37,11 +37,11 @@ class UserController {
     }
   };
 
-  getUserById = async (req, res, callback) => {
+  getUserById = async (request, response, callback) => {
     try {
-      let user = await this.user_service.findUserById(req.params?.id);
+      let user = await this.user_service.findUserById(request.params?.id);
 
-      res.json({
+      response.json({
         result: user,
         status: true,
         message: "User info fetched.",
@@ -54,26 +54,37 @@ class UserController {
     }
   };
 
-  updateUser = async (req, res, callback) => {
-    try {
-      res.json({
-        result: null,
-        status: true,
-        message: "User updated.",
-      });
-    } catch (error) {
+  updateUser = async (request, response, callback) => {
+    if (
+      request.auth_user.id !== request.params.id &&
+      request.auth_user.role !== "admin"
+    ) {
       callback({
-        status: 500,
-        message: error || "Internal Server Error",
+        status: 403,
+        message: "Unauthorized access.",
       });
     }
-  };
-
-  deleteUser = (req, res, callback) => {
-    res.json({
+    response.json({
       result: null,
       status: true,
-      message: "User deleted.",
+      message: "User updated.",
+    });
+  };
+
+  deleteUser = (request, response, callback) => {
+    if (
+      request.auth_user.id !== request.params.id &&
+      request.auth_user.role !== "admin"
+    ) {
+      callback({
+        status: 403,
+        message: "Unauthorized access.",
+      });
+    }
+    response.json({
+      result: null,
+      status: true,
+      message: "User deleted..",
     });
   };
 }
