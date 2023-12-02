@@ -14,10 +14,7 @@ class UserController {
         message: "User fetched.",
       });
     } catch (error) {
-      callback({
-        status: 500,
-        message: error || "Internal Server Error",
-      });
+      callback(error);
     }
   };
 
@@ -30,10 +27,7 @@ class UserController {
         message: "Admin users fetched.",
       });
     } catch (error) {
-      callback({
-        status: 500,
-        message: error || "Internal Server Error",
-      });
+      callback(error);
     }
   };
 
@@ -47,10 +41,7 @@ class UserController {
         message: "User info fetched.",
       });
     } catch (error) {
-      callback({
-        status: 500,
-        message: error || "Internal Server Error",
-      });
+      callback(error);
     }
   };
 

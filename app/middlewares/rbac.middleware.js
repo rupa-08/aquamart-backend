@@ -2,7 +2,7 @@ const isCustomer = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() === "customer") {
+  if (String(role).toLowerCase() === "customer") {
     callback();
   } else {
     callback({
@@ -16,7 +16,7 @@ const isAdmin = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() === "admin") {
+  if (String(role).toLowerCase() === "admin") {
     callback();
   } else {
     callback({
@@ -30,7 +30,7 @@ const isSeller = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() === "seller") {
+  if (String(role).toLowerCase() === "seller") {
     callback();
   } else {
     callback({
@@ -44,7 +44,10 @@ const isSellerOrAdmin = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() === "seller" && role.toLowerCase() === "admin") {
+  if (
+    String(role).toLowerCase() === "seller" &&
+    String(role).toLowerCase() === "admin"
+  ) {
     callback();
   } else {
     callback({
@@ -58,7 +61,10 @@ const isSellerOrCustomer = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() === "seller" && role.toLowerCase() === "customer") {
+  if (
+    String(role).toLowerCase() === "seller" &&
+    String(role).toLowerCase() === "customer"
+  ) {
     callback();
   } else {
     callback({
@@ -72,7 +78,7 @@ const isAdminOrCustomer = (request, response, callback) => {
   let user = request.auth_user;
   let role = user.role;
 
-  if (role.toLowerCase() !== "seller") {
+  if (String(role).toLowerCase() !== "seller") {
     callback();
   } else {
     callback({

@@ -28,11 +28,7 @@ class AuthController {
         throw user;
       }
     } catch (error) {
-      console.log("error", error);
-      callback({
-        status: 500,
-        message: error || "Internal Server Error",
-      });
+      callback(error);
     }
   };
 
@@ -56,11 +52,7 @@ class AuthController {
         throw user;
       }
     } catch (error) {
-      console.log(error);
-      callback({
-        status: 500,
-        message: error || "Internal Server Error",
-      });
+      callback(error);
     }
   };
 }
