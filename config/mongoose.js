@@ -8,7 +8,7 @@ mongoose
     autoCreate: true,
     autoIndex: true,
   })
-  .then(() => console.log("Databse connection success"))
+  .then(() => console.log("Database connection success."))
   .catch((error) => {
     "Database connection failed.", error;
   });

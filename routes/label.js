@@ -9,6 +9,13 @@ const label_controller = new LabelController();
 
 router
   .route("/")
-  .post(isAdmin, uploader.single("image"), label_controller.createLabel);
+  .post(isAdmin, uploader.single("image"), label_controller.createLabel)
+  .get(label_controller.getLabel);
+
+router
+  .route("/:id")
+  .get(label_controller.getLabelById)
+  .put(isAdmin, uploader.single("image"), label_controller.updateLabel)
+  .delete(isAdmin, label_controller.deleteLabel);
 
 module.exports = router;
