@@ -1,5 +1,6 @@
 const slugify = require("slugify");
 const LabelService = require("../services/label.service");
+const { deleteImage } = require("../../config/helpers");
 
 class LabelController {
   constructor() {
@@ -99,6 +100,11 @@ class LabelController {
       let data = await this.label_service.deleteLabel(request.params.id);
 
       if (data) {
+        let image = data.image;
+        if (image) {
+          deleteImage(image);
+        }
+
         response.json({
           result: data,
           message: "Label deleted successfully.",
