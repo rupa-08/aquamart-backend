@@ -16,4 +16,6 @@ router
   )
   .get(product_controller.getProduct);
 
+router.route("/:id").get(product_controller.getProductById);
+
 module.exports = router;

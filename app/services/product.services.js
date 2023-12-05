@@ -58,5 +58,22 @@ class ProductService {
       throw { status: 400, message: error };
     }
   };
+
+  getProductById = async (id) => {
+    try {
+      let product = await ProductModel.findById(id);
+
+      if (product) {
+        return product;
+      } else {
+        throw {
+          status: 400,
+          message: "Product fetched by id unsuccessful.",
+        };
+      }
+    } catch (error) {
+      throw { status: 400, message: "Product not found." };
+    }
+  };
 }
 module.exports = ProductService;

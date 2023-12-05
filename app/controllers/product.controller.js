@@ -51,6 +51,21 @@ class ProductController {
       callback(error);
     }
   };
+
+  getProductById = async (request, response, callback) => {
+    try {
+      let id = request.params.id;
+
+      let product = await this.product_service.getProductById(id);
+      response.json({
+        result: product,
+        status: true,
+        message: "Product fetched by id.",
+      });
+    } catch (error) {
+      callback(error);
+    }
+  };
 }
 
 module.exports = ProductController;
