@@ -11,7 +11,7 @@ router
   .route("/")
   .post(
     isSellerOrAdmin,
-    uploader.single("image"),
+    uploader.array("image"),
     product_controller.createProduct
   )
   .get(product_controller.getProduct);
@@ -21,7 +21,7 @@ router
   .get(product_controller.getProductById)
   .put(
     isSellerOrAdmin,
-    uploader.single("image"),
+    uploader.array("image"),
     product_controller.updateProduct
   )
   .delete(isSellerOrAdmin, product_controller.deleteProduct);
