@@ -66,6 +66,31 @@ class ProductController {
       callback(error);
     }
   };
+
+  updateProduct = async (request, response, callback) => {
+    try {
+      let data = request.body;
+
+      if (request.file) {
+        data.image = request.file.filename;
+      }
+
+      this.product_service.validateProduct(data, true);
+
+      let updatedProduct = await this.product_service.updateProduct(
+        request.params.id,
+        data
+      );
+
+      response.json({
+        result: updatedProduct,
+        message: "Product updated successful.",
+        status: true,
+      });
+    } catch (error) {
+      callback(error);
+    }
+  };
 }
 
 module.exports = ProductController;

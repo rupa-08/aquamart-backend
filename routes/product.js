@@ -16,6 +16,13 @@ router
   )
   .get(product_controller.getProduct);
 
-router.route("/:id").get(product_controller.getProductById);
+router
+  .route("/:id")
+  .get(product_controller.getProductById)
+  .put(
+    isSellerOrAdmin,
+    uploader.single("image"),
+    product_controller.updateProduct
+  );
 
 module.exports = router;

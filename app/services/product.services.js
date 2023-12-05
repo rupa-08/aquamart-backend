@@ -1,7 +1,7 @@
 const ProductModel = require("../models/product.schema");
 
 class ProductService {
-  validateProduct = (data) => {
+  validateProduct = (data, is_edit = false) => {
     const requiredFields = [
       "name",
       "color",
@@ -22,7 +22,7 @@ class ProductService {
       }
     });
 
-    if (!data.image) {
+    if (!data.image && !is_edit) {
       message["image"] = "Image is required";
     }
 
@@ -73,6 +73,21 @@ class ProductService {
       }
     } catch (error) {
       throw { status: 400, message: "Product not found." };
+    }
+  };
+
+  updateProduct = async (id, data) => {
+    try {
+      let product = await ProductModel.findByIdAndUpdate(id, {
+        $set: data,
+      });
+      if (product) {
+        return product;
+      } else {
+        throw { status: 400, message: "Product updated failed" };
+      }
+    } catch (error) {
+      throw { status: 400, message: error };
     }
   };
 }
