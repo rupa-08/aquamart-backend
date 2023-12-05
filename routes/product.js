@@ -23,6 +23,7 @@ router
     isSellerOrAdmin,
     uploader.single("image"),
     product_controller.updateProduct
-  );
+  )
+  .delete(isSellerOrAdmin, product_controller.deleteProduct);
 
 module.exports = router;

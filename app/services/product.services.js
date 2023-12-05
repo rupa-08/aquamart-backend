@@ -90,5 +90,18 @@ class ProductService {
       throw { status: 400, message: error };
     }
   };
+
+  deleteProduct = async (id) => {
+    try {
+      let data = await ProductModel.findByIdAndDelete(id);
+      if (data) {
+        return data;
+      } else {
+        throw { status: 400, message: "Product deleted successfully." };
+      }
+    } catch (error) {
+      throw { status: 400, message: error };
+    }
+  };
 }
 module.exports = ProductService;

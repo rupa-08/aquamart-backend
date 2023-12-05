@@ -1,3 +1,4 @@
+const { deleteImage } = require("../../config/helpers");
 const ProductService = require("../services/product.services");
 const slugify = require("slugify");
 
@@ -85,6 +86,24 @@ class ProductController {
       response.json({
         result: updatedProduct,
         message: "Product updated successful.",
+        status: true,
+      });
+    } catch (error) {
+      callback(error);
+    }
+  };
+  deleteProduct = async (request, response, callback) => {
+    try {
+      let id = request.params.id;
+      let data = await this.product_service.deleteProduct(id);
+
+      if (data && data.image) {
+        deleteImage(data.image);
+      }
+
+      response.json({
+        result: data,
+        message: "Product deleted successfully.",
         status: true,
       });
     } catch (error) {
