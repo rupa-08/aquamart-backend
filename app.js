@@ -1,41 +1,58 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require("express");
+const app = express();
+var path = require("path");
+const routes = require("./routes");
+const events = require("./app/events/event");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require("./config/mongoose");
 
-var app = express();
+const http = require("http");
+const server = http.createServer(app);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-app.use(logger('dev'));
+io.on("connection", (socket) => {
+  console.log("Client connected.");
+});
+
+app.use(events);
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.urlencoded({ extended: true }));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "jade");
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+);
+app.use("/api/v1", routes);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use((req, res, callback) => {
+  callback({
+    status: 404,
+    message: "Page not found!",
+  });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// garbage collector or error handeling middleware
+app.use((error, req, res, callback) => {
+  let status_code = error.status || 500;
+  let message = error.message || error;
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(status_code).json({
+    result: null,
+    status: false,
+    message: message,
+  });
 });
 
-module.exports = app;
+app.listen(9000, "127.0.0.1", (error) => {
+  if (error) {
+    console.log("Error listening to port 9000");
+  } else {
+    console.log("Server started.");
+  }
+});
