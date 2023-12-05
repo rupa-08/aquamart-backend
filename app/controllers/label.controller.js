@@ -77,7 +77,7 @@ class LabelController {
       if (request.file) {
         data.image = request.file.filename;
       }
-
+      console.log(request);
       this.label_service.validateLabelContent(data, true);
 
       let result = await this.label_service.updateLabel(

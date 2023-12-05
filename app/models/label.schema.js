@@ -6,12 +6,12 @@ const LabelSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      unique: [true, "Name should always be unique."],
+      unique: true,
     },
     slug: {
       type: String,
       required: true,
-      unique: [true, "Slug should always be unique."],
+      unique: true,
     },
     type: {
       type: String,

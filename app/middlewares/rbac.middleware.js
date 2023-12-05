@@ -45,7 +45,7 @@ const isSellerOrAdmin = (request, response, callback) => {
   let role = user.role;
 
   if (
-    String(role).toLowerCase() === "seller" &&
+    String(role).toLowerCase() === "seller" ||
     String(role).toLowerCase() === "admin"
   ) {
     callback();
@@ -62,7 +62,7 @@ const isSellerOrCustomer = (request, response, callback) => {
   let role = user.role;
 
   if (
-    String(role).toLowerCase() === "seller" &&
+    String(role).toLowerCase() === "seller" ||
     String(role).toLowerCase() === "customer"
   ) {
     callback();
