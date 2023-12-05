@@ -13,6 +13,7 @@ router
     isSellerOrAdmin,
     uploader.single("image"),
     product_controller.createProduct
-  );
+  )
+  .get(product_controller.getProduct);
 
 module.exports = router;

@@ -29,6 +29,28 @@ class ProductController {
       callback(error);
     }
   };
+
+  getProduct = async (request, response, callback) => {
+    try {
+      let filters = {};
+
+      if (request.query.product_name) {
+        filters = {
+          name: request.query.product_name,
+        };
+      }
+
+      let data = await this.product_service.getProduct(filters);
+
+      response.json({
+        result: data,
+        message: "Product fetched successfully.",
+        status: true,
+      });
+    } catch (error) {
+      callback(error);
+    }
+  };
 }
 
 module.exports = ProductController;

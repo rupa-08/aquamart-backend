@@ -44,5 +44,19 @@ class ProductService {
       throw { status: 400, message: error };
     }
   };
+
+  getProduct = async (filters = {}) => {
+    try {
+      let product = await ProductModel.find(filters);
+
+      if (product) {
+        return product;
+      } else {
+        throw { status: 400, message: "Data not found." };
+      }
+    } catch (error) {
+      throw { status: 400, message: error };
+    }
+  };
 }
 module.exports = ProductService;
