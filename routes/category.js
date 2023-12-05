@@ -9,7 +9,11 @@ const category_controller = new CategoryController();
 
 router
   .route("/")
-  .post(isSellerOrAdmin, category_controller.createCategory)
+  .post(
+    isSellerOrAdmin,
+    uploader.single("file"),
+    category_controller.createCategory
+  )
   .get(category_controller.getCategory);
 
 router
